@@ -8,6 +8,7 @@ setup(
     author_email='domingo.mery@uc.cl',
     url="https://github.com/domingomery/balu3",
     py_modules = ['balu3.fx.geo',
+                  'balu3.fx.chr',
                   'balu3.io.plots',
                   'balu3.io.misc',
                   'balu3.io.visualization'
