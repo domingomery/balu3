@@ -30,15 +30,13 @@ def sklbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
         X = np.concatenate((X,xrc))
     if norm:
       X = X/np.linalg.norm(X)
-    if names==True:
-      Xn = []
+  if names==True:
+    Xn = []
     for k in range(n_bins):
       Xn.append(st+'-'+str(k))
     return X,Xn
   else:
     return X
-
-    return x
 
 
 
