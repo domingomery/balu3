@@ -29,7 +29,7 @@ def sklbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
       else:
         X = np.concatenate((X,xrc))
     if norm:
-      X = X/np.linalg.norm(x)
+      X = X/np.linalg.norm(X)
     if names==True:
       Xn = []
     for k in range(n_bins):
