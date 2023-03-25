@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import skimage
 import cv2
 from   scipy.ndimage import binary_fill_holes
-from skimage.segmentation import find_boundaries
+from   skimage.segmentation import find_boundaries
 
 
 
