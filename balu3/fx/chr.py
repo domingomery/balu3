@@ -28,7 +28,7 @@ def sklbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
         k = 1
       else:
         X = np.concatenate((X,xrc))
-    if norm:
+  if norm:
       X = X/np.linalg.norm(X)
   if names==True:
     Xn = []
