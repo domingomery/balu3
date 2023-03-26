@@ -10,9 +10,9 @@ setup(
     py_modules = ['balu3.fx.geo',
                   'balu3.fx.chr',
                   'balu3.ft.norm',
-                  'balu3.im.proc'
-                  'balu3.im.kfunc'
-                  'balu3.im.seg'
+                  'balu3.im.proc',
+                  'balu3.im.kfunc',
+                  'balu3.im.seg',
                   'balu3.io.plots',
                   'balu3.io.misc',
                   'balu3.io.vis'
