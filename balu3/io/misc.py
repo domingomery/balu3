@@ -1,14 +1,5 @@
-#import matplotlib.pyplot as plt
-#import matplotlib.gridspec as gridspec
-#import cv2
-#from PIL import Image
-#import numpy as np
-#from sklearn.metrics import confusion_matrix, accuracy_score
-#from seaborn import heatmap
-#from mpl_toolkits.mplot3d import Axes3D
 import os, fnmatch
-#import matplotlib.pyplot as plt
-#from matplotlib.patches import Ellipse
+import matplotlib.pyplot as plt
 
 def dirfiles(img_path,img_ext):
     img_names = fnmatch.filter(sorted(os.listdir(img_path)),img_ext)
@@ -19,4 +10,11 @@ def dirfiles(img_path,img_ext):
 def num2fixstr(x,d):
     st = '%0*d' % (d,x)
     return st
+
+def imageload(prefix,num_class,digits_class,num_img,digits_img,echo='off'):
+  st   = prefix + num2fixstr(num_class,digits_class) + '_' + num2fixstr(num_img,digits_img) + '.png'
+  if echo == 'on':
+    print('loading image '+st+'...')
+  img    = plt.imread(st)
+  return img
 
