@@ -5,7 +5,8 @@ import cv2
 
 
 from   skimage.feature import local_binary_pattern
-
+from   skimage.filters import gabor_kernel
+from   scipy import ndimage as ndi
 
 def lbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
   if mapping == 'nri_uniform':
@@ -50,7 +51,7 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
   for r in range(0,img.shape[0] - nn+1, nn):
     for c in range(0,img.shape[1] - mm+1, mm):
       w  = img[r:r+nn,c:c+mm]
-      g  = skimage.feature.graycomatrix(w, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4], levels=256)
+      g  = skimage.feature.graycomatrix(w, [distance], [0, np.pi/4, np.pi/2, 3*np.pi/4], levels=256)
       x0 = skimage.feature.graycoprops(g, fst[0])
       x1 = skimage.feature.graycoprops(g, fst[1])
       x2 = skimage.feature.graycoprops(g, fst[2])
@@ -81,6 +82,21 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
   return x
 
 
-
+def gabor(image,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25)):
+  kernels = []
+  for theta in range(angles):
+    theta = theta / 4. * np.pi
+    for sigma in sigmas:
+        for frequency in frequencies:
+            kernel = np.real(gabor_kernel(frequency, theta=theta,
+                                          sigma_x=sigma, sigma_y=sigma))
+            kernels.append(kernel)
+  feats = np.zeros((len(kernels), 2), dtype=np.double)
+  for k, kernel in enumerate(kernels):
+        filtered = ndi.convolve(image, kernel, mode='wrap')
+        feats[k, 0] = filtered.mean()
+        feats[k, 1] = filtered.var()
+  X = feats.reshape(len(kernels)*2,)
+  return X
 
 
