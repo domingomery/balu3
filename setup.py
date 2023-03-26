@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name="balu3",
     version="1.0",
-    author='Domingo Mery',
+    authors='Domingo Mery, Christian Pieringer, Marco Bucchi',
     author_email='domingo.mery@uc.cl',
     url="https://github.com/domingomery/balu3",
     py_modules = ['balu3.fx.geo',

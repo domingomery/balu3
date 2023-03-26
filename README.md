@@ -6,6 +6,15 @@ Work in Progress (do not install it !!)
 
 Python implementation for Balu Toolbox, based on previous implementations: Balu for Matlab (implemented by Domingo Mery), pyBalu for Python (implemented by Marco Bucchi), and pyXvis (implemented by Domingo Mery and Christian Pieringer).
 
+# Authors
+
+Domingo Mery, Christian Pieringer and Marco Bucchi
+
+# Examples
+
+[![Colab Examples](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/domingomery/patrones/blob/master/Notebooks.md) Examples implemented in Balu3 using Google Colab.
+
+
 
 # Requirements
 
