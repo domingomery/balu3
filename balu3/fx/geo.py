@@ -27,8 +27,8 @@ def basicgeo(R,names=False):
 
   # perimeter
   # https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.find_boundaries
-  B = skimage.segmentation.find_boundaries(R,mode='inner')
-  perimeter = np.sum(B)
+  # B = skimage.segmentation.find_boundaries(R,mode='inner')
+  # perimeter = np.sum(B)
 
   # roundness
   roundness = 4*area*np.pi/perimeter/perimeter
