@@ -82,7 +82,7 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
   return x
 
 
-def gabor(image,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25)):
+def gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm=False):
   kernels = []
   for theta in range(angles):
     theta = theta / 4. * np.pi
@@ -91,12 +91,26 @@ def gabor(image,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25)):
             kernel = np.real(gabor_kernel(frequency, theta=theta,
                                           sigma_x=sigma, sigma_y=sigma))
             kernels.append(kernel)
+  n       = len(kernels)
+  (nv,nh) = (vdiv,hdiv)
+  nn  = int(np.fix(img.shape[0]/nv))
+  mm  = int(np.fix(img.shape[1]/nh))
+  k = 0
   feats = np.zeros((len(kernels), 2), dtype=np.double)
-  for k, kernel in enumerate(kernels):
-        filtered = ndi.convolve(image, kernel, mode='wrap')
-        feats[k, 0] = filtered.mean()
-        feats[k, 1] = filtered.var()
-  X = feats.reshape(len(kernels)*2,)
+  X = np.zeros((n*nh*nv*2,))
+  t = 0
+  for r in range(0,img.shape[0] - nn+1, nn):
+    for c in range(0,img.shape[1] - mm+1, mm):
+      w  = img[r:r+nn,c:c+mm]
+      for j in range(n): #,kernel in enumerate(kernels):
+        kernel = kernels[j]
+        filtered = ndi.convolve(w, kernel, mode='wrap')
+        X[t]   = filtered.mean()
+        X[t+1] = filtered.var()
+        t = t+2
+  if norm:
+    X = X/np.linalg.norm(X)
   return X
+
 
 
