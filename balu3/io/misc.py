@@ -11,8 +11,8 @@ def num2fixstr(x,d):
     st = '%0*d' % (d,x)
     return st
 
-def imageload(prefix,num_class,digits_class,num_img,digits_img,echo='off'):
-  st   = prefix + num2fixstr(num_class,digits_class) + '_' + num2fixstr(num_img,digits_img) + '.png'
+def imageload(prefix,num_class,digits_class,num_img,digits_img,sep='_',echo='off'):
+  st   = prefix + num2fixstr(num_class,digits_class) + sep + num2fixstr(num_img,digits_img) + '.png'
   if echo == 'on':
     print('loading image '+st+'...')
   img    = plt.imread(st)
