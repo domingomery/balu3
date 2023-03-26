@@ -6,7 +6,54 @@ from   skimage.feature import local_binary_pattern
 from   skimage.filters import gabor_kernel
 from   scipy import ndimage as ndi
 from   scipy.fftpack import dct
+from   scipy.stats import kurtosis,skew
 from   scipy.ndimage.morphology import binary_dilation as imdilate
+from   balu3.im.proc import fspecial, im_grad
+
+def basicint(image, region=None, *, mask=15, names=False):
+    if region is None:
+        region = np.ones(shape=image.shape, dtype=int)
+    
+    r_perim = skimage.segmentation.find_boundaries(region,mode='inner')
+    region = region.astype(bool)
+
+    image = image.astype(float)
+
+    kernel = fspecial('gaussian',mask,mask/8.5)
+
+    im1, _ = im_grad(image, kernel)
+    im2, _ = im_grad(im1  , kernel)
+
+    if not region.all():
+        boundary_gradient = np.abs(im1[r_perim]).mean()
+    else:
+        boundary_gradient = -1
+
+    useful_img = image[region]
+
+    intensity_mean     = useful_img.mean()
+    intensity_std      = useful_img.std(ddof=1)
+    intensity_kurtosis = kurtosis(useful_img, fisher=False)
+    intensity_skewness = skew(useful_img)
+    mean_laplacian     = im2[region].mean()
+
+    X                  = np.array([intensity_mean,
+                             intensity_std,
+                             intensity_kurtosis,
+                             intensity_skewness,
+                             mean_laplacian,
+                             boundary_gradient])
+    if names:
+      Xn = ['Intensity Mean',
+            'Intensity StdDev',
+            'Intensity Kurtosis',
+            'Intensity Skewness',
+            'Mean Laplacian',
+            'Mean Boundary Gradient']
+      return X,Xn
+    else:
+      return X
+
 
 
 def lbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):

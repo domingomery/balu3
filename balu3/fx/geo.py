@@ -27,15 +27,15 @@ def basicgeo(R,names=False):
 
   # perimeter
   # https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.find_boundaries
-  # B = skimage.segmentation.find_boundaries(R,mode='inner')
-  # perimeter = np.sum(B)
+  B = skimage.segmentation.find_boundaries(R,mode='inner')
+  perimeter = np.sum(B)
 
 
   # regionprops
   # https://scikit-image.org/docs/stable/api/skimage.measure.html#regionprops
   props        = skimage.measure.regionprops(R)[0]
 
-  perimeter    = props.perimeter
+  #perimeter    = props.perimeter
   roundness    = 4*area*np.pi/perimeter/perimeter
   solidity     = props.solidity
   euler_number = props.euler_number
@@ -48,7 +48,7 @@ def basicgeo(R,names=False):
   area_convex  = props.area_convex
 
   # roundness
-  roundness    = 4*area*np.pi/perimeter/perimeter
+  #roundness    = 4*area*np.pi/perimeter/perimeter
 
   X = [i_m,j_m,h,w,area,perimeter,roundness,
        euler_number,eq_diameter,axis_major,axis_minor,
