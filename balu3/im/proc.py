@@ -12,7 +12,7 @@ from cv2 import GaussianBlur, medianBlur
 from skimage.feature import canny
 from scipy.signal import convolve2d
 
-import xcv.kfunctions as kfunc
+import balu3.im.kfunc as kfunc
 # from pyxvis.processing.helpers import kfunctions as kfunc
 
 
