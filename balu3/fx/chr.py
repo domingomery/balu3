@@ -9,6 +9,7 @@ from   scipy.fftpack import dct
 from   scipy.stats import kurtosis,skew
 from   scipy.ndimage.morphology import binary_dilation as imdilate
 from   balu3.im.proc import fspecial, im_grad
+import itertools as it
 
 def basicint(image, region=None, *, mask=15, names=False):
     if region is None:
@@ -157,6 +158,87 @@ def gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm
   if norm:
     X = X/np.linalg.norm(X)
   return X
+
+
+
+def gabor_kernel(p, q, L, sx, sy, u0, alpha, M):
+    sx2 = sx * sx
+    sy2 = sy * sy
+    c = (M + 1) / 2
+    ap = alpha ** (-p)
+    tq = np.pi * q / L
+    cos_tq = np.cos(tq)
+    sin_tq = np.sin(tq)
+    f_exp = 2 * np.pi * 1j * u0
+
+    X = ap * np.repeat(np.arange(M) - c, M).reshape(M, M)
+    Y = X.T
+
+    _X = X * cos_tq + Y * sin_tq
+    _Y = Y * cos_tq - X * sin_tq
+
+    f = np.exp(-.5 * (_X * _X / sx2 + _Y * _Y / sy2)) * np.exp(f_exp * _X)
+    return f * ap / (2 * np.pi * sx * sy)
+
+_log2 = np.log(2)
+_log2_sq = _log2 * _log2
+sqrt_log2 = np.sqrt(_log2)
+_2pi = 2 * np.pi
+
+def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1, mask=21, names=False):
+
+    if mask % 2 == 0:
+        raise ValueError(
+            "`mask` value must be an odd positive integer, not '{mask}'")
+
+    if region is None:
+        region = np.ones_like(image)
+
+
+    alpha = (freq_h / freq_l) ** (1 / (dilations - 1))
+    sx = sqrt_log2 * (alpha + 1) / (2 * np.pi * freq_h * (alpha-1))
+    sy = sqrt_log2 - (2*_log2 / (_2pi * sx * freq_h))**2 /\
+                     (_2pi * np.tan(np.pi / (2 * rotations)) *
+                      (freq_h - 2 * np.log(1/4/np.pi**2/sx**2/freq_h)))
+    u0 = freq_h
+
+    k = np.where(region.astype(bool))
+    N, M = image.shape
+
+    g = np.zeros((dilations, rotations))
+    size_out = image.shape + np.repeat(mask, 2) - 1
+    Iw = np.fft.fft2(image, size_out)
+    n1 = (mask + 1) // 2
+
+    for p, q in it.product(range(dilations), range(rotations)):
+        f = gabor_kernel(p, q, rotations, sx, sy, u0, alpha, mask)
+        Ir = np.real(np.fft.ifft2(Iw * np.fft.fft2(np.real(f), size_out)))
+        Ii = np.real(np.fft.ifft2(Iw * np.fft.fft2(np.imag(f), size_out)))
+        Ir = Ir[n1:n1+N, n1:n1+M]
+        Ii = Ii[n1:n1+N, n1:n1+M]
+        Iout = np.sqrt(Ir*Ir + Ii*Ii)
+        g[p, q] = Iout[k].mean()
+
+    gmax = g.max()
+    gmin = g.min()
+    J = (gmax - gmin) / gmin
+    features = np.hstack([g.ravel(), gmax, gmin, J])
+
+    if names:
+        gabor_labels = np.hstack([
+            [f'Gabor({p},{q})' for p, q in it.product(
+                range(dilations), range(rotations))],
+            ['Gabor-max', 'Gabor-min', 'Gabor-J']
+        ])
+
+        return gabor_labels, features
+
+    return features
+
+
+
+
+
 
 def fourier(I,region=None,Nfourier=64,Mfourier=64,nfourier=4,mfourier=4):
     if region is None:

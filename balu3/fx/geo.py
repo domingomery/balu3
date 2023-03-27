@@ -203,7 +203,6 @@ def fourierdes(R, n_des=16, names=False):
     x = np.array(contour)
     B = x.reshape(x.shape[1],2)
     V = B[:, 0] + 1j * B[:, 1]
-    plt.plot(B[:, 1],B[:, 0])
     m = B.shape[0]
 
     r = np.zeros(m, dtype=complex)
