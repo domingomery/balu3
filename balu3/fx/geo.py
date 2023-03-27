@@ -81,6 +81,7 @@ def hugeo(R,names=False):
 
 
 def efd_descriptors(contour, order=10, normalize=True):
+    # From https://github.com/hbldh/pyefd
   
     """Calculate elliptical Fourier descriptors for a contour.
     :param numpy.ndarray contour: A contour array of size ``[M x 2]``.
@@ -174,7 +175,8 @@ def efd_descriptors(contour, order=10, normalize=True):
 
     return X
 
-def fourierdes(R, order=10, names=False):
+def efourierdes(R, order=10, names=False):
+  # Elliptic Fourier Descriptors from https://github.com/hbldh/pyefd
   R8h    = binary_fill_holes(R).astype(np.uint8)
   contours, hierarchy = cv2.findContours(R8h, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
   X = efd_descriptors(contours, order=order)
@@ -189,7 +191,58 @@ def fourierdes(R, order=10, names=False):
     return X,Xn
   else:
     return X
-  
+
+from   skimage.segmentation import find_boundaries
+from   scipy.ndimage import binary_fill_holes
+
+
+def fourierdes(R, n_des=16, names=False):
+
+    E        = find_boundaries(R, mode='outer').astype(np.uint8)
+    B        = np.argwhere(E==True)
+
+    V = B[:, 1] + 1j * B[:, 0]
+    m = B.shape[0]
+
+    r = np.zeros(m, dtype=complex)
+    phi = np.zeros(m)
+    dphi = np.zeros(m)
+    l = np.zeros(m)
+    dl = np.zeros(m)
+
+    r[0] = V[0] - V[m-1]
+    r[1:] = V[1:] - V[:m-1]
+
+    dl = np.abs(r)
+    phi = np.angle(r)
+
+    dphi[:m-1] = np.mod(phi[1:] - phi[:m-1] + np.pi, 2 * np.pi) - np.pi
+    dphi[m-1] = np.mod(phi[0] - phi[m-1] + np.pi, 2 * np.pi) - np.pi
+
+    l[0] = dl[0]
+    for k in range(1, m):
+        l[k] = l[k-1] + dl[k]
+
+    l = l * (2 * np.pi / l[m-1])
+    descriptors = np.zeros(n_des)
+
+    for n in range(1, n_des + 1):
+        an = (dphi * np.sin(l * n)).sum()
+        bn = (dphi * np.cos(l * n)).sum()
+        an = -an / n / np.pi
+        bn = bn / n / np.pi
+        imagi = an + 1j * bn
+        descriptors[n-1] = np.abs(imagi)
+
+    X = descriptors
+
+    if names:
+        return np.array([f'Fourier-des {n+1:>2d}' for n in range(n_des)]), descriptors
+    return X
+
+
+
+
 def fit_ellipse(x,y):
     # Fitzgibbon, A.W., Pilu, M., and Fischer R.B., 
     # Direct least squares fitting of ellipses, 1996
