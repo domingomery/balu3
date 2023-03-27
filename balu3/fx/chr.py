@@ -161,7 +161,7 @@ def gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm
 
 
 
-def gabor_kernel(p, q, L, sx, sy, u0, alpha, M):
+def gaborkernel(p, q, L, sx, sy, u0, alpha, M):
     sx2 = sx * sx
     sy2 = sy * sy
     c = (M + 1) / 2
@@ -185,7 +185,7 @@ _log2_sq = _log2 * _log2
 sqrt_log2 = np.sqrt(_log2)
 _2pi = 2 * np.pi
 
-def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1, mask=21, names=False):
+def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1, mask=21, norm=False, names=False):
 
     if mask % 2 == 0:
         raise ValueError(
@@ -211,7 +211,7 @@ def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1,
     n1 = (mask + 1) // 2
 
     for p, q in it.product(range(dilations), range(rotations)):
-        f = gabor_kernel(p, q, rotations, sx, sy, u0, alpha, mask)
+        f = gaborkernel(p, q, rotations, sx, sy, u0, alpha, mask)
         Ir = np.real(np.fft.ifft2(Iw * np.fft.fft2(np.real(f), size_out)))
         Ii = np.real(np.fft.ifft2(Iw * np.fft.fft2(np.imag(f), size_out)))
         Ir = Ir[n1:n1+N, n1:n1+M]
@@ -222,23 +222,20 @@ def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1,
     gmax = g.max()
     gmin = g.min()
     J = (gmax - gmin) / gmin
-    features = np.hstack([g.ravel(), gmax, gmin, J])
+    X = np.hstack([g.ravel(), gmax, gmin, J])
 
+    if norm:
+      X = X/np.linalg.norm(X)
     if names:
-        gabor_labels = np.hstack([
+        Xn = np.hstack([
             [f'Gabor({p},{q})' for p, q in it.product(
                 range(dilations), range(rotations))],
             ['Gabor-max', 'Gabor-min', 'Gabor-J']
         ])
 
-        return gabor_labels, features
+        return X,Xn
 
-    return features
-
-
-
-
-
+    return X
 
 def fourier(I,region=None,Nfourier=64,Mfourier=64,nfourier=4,mfourier=4):
     if region is None:
