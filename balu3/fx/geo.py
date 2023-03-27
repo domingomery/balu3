@@ -311,3 +311,35 @@ def fitellipse(R,names=False):
     else:
        return X
     return features
+
+def gupta(R, names=False):
+
+    B = skimage.segmentation.find_boundaries(R,mode='inner')
+    i_perim, j_perim = np.where(B.astype(bool))
+    im_perim = i_perim + j_perim * 1j
+    ix = i_perim.mean()
+    jx = j_perim.mean()
+    centre = ix + jx * 1j
+    z = np.abs(im_perim - centre)
+    m1 = z.mean()
+
+    mur1 = z - m1
+    mur2 = mur1 * mur1
+    mur3 = mur1 * mur2
+    mur4 = mur2 * mur2
+
+    mu2 = mur2.mean()
+    mu3 = mur3.mean()
+    mu4 = mur4.mean()
+
+    F1 = (mu2 ** .5) / m1
+    F2 = mu3 / (mu2 * (mu2 ** .5))
+    F3 = mu4 / mu2 ** 2
+
+    X = np.array([F1, F2, F3])
+
+    if names:
+      Xn = ['Gupta-1','Gupta-2','Gupta-3']
+      return X,Xn
+    else:
+      return X

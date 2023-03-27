@@ -130,6 +130,7 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
 
 
 def gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm=False):
+  # from scipy
   kernels = []
   for theta in range(angles):
     theta = theta / 4. * np.pi
@@ -160,7 +161,7 @@ def gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm
   return X
 
 
-
+# from Balu Toolbox
 def gaborkernel(p, q, L, sx, sy, u0, alpha, M):
     sx2 = sx * sx
     sy2 = sy * sy
@@ -185,6 +186,7 @@ _log2_sq = _log2 * _log2
 sqrt_log2 = np.sqrt(_log2)
 _2pi = 2 * np.pi
 
+# from Balu Toolbox
 def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1, mask=21, norm=False, names=False):
 
     if mask % 2 == 0:
