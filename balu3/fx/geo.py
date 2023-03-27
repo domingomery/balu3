@@ -198,10 +198,12 @@ from   scipy.ndimage import binary_fill_holes
 
 def fourierdes(R, n_des=16, names=False):
 
-    E        = find_boundaries(R, mode='outer').astype(np.uint8)
-    B        = np.argwhere(E==True)
-
-    V = B[:, 1] + 1j * B[:, 0]
+    R8h    = binary_fill_holes(R).astype(np.uint8)
+    contour, hierarchy = cv2.findContours(R8h, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    x = np.array(contour)
+    B = x.reshape(x.shape[1],2)
+    V = B[:, 0] + 1j * B[:, 1]
+    plt.plot(B[:, 1],B[:, 0])
     m = B.shape[0]
 
     r = np.zeros(m, dtype=complex)
