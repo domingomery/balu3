@@ -79,6 +79,21 @@ def hugeo(R,names=False):
   else:
     return X
 
+def flusser(R,names=False):
+  moments = cv2.moments(R, True)
+  u00,u20, u11, u02, u30, u21, u12, u03 = moments['m00'], moments['mu20'], moments['mu11'], moments['mu02'], moments['mu30'], moments['mu21'], moments['mu12'], moments['mu03']
+  I1 = (u20*u02-u11**2)/u00**4 ;
+  I2 = (u30**2*u03**2-6*u30*u21*u12*u03+4*u30*u12**3+4*u21**3*u03-3*u21**2*u12**2)/u00**10;
+  I3 = (u20*(u21*u03-u12**2)-u11*(u30*u03-u21*u12)+u02*(u30*u12-u21**2))/u00**7;
+  I4 = (u20**3*u03**2-6*u20**2*u11*u12*u03-6*u20**2*u02*u21*u03+9*u20**2*u02*u12**2 + 12*u20*u11**2*u21*u03+6*u20*u11*u02*u30*u03-18*u20*u11*u02*u21*u12-8*u11**3*u30*u03- 6*u20*u02**2*u30*u12+9*u20*u02**2*u21+12*u11**2*u02*u30*u12-6*u11*u02**2*u30*u21+u02**3*u30**2)/u00**11;
+  X = [I1,I2,I3,I4]
+  if names:
+    Xn = ['Flusser-1','Flusser-2','Flusser-3','Flusser-4']
+    return X,Xn
+  else:
+    return X
+
+
 
 def efd_descriptors(contour, order=10, normalize=True):
     # From https://github.com/hbldh/pyefd
