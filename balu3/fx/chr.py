@@ -5,7 +5,6 @@ import cv2
 from   skimage.feature import local_binary_pattern
 from   skimage.filters import gabor_kernel
 from   scipy import ndimage as ndi
-from   scipy.fftpack import dct
 from   scipy.stats import kurtosis,skew
 from   scipy.ndimage.morphology import binary_dilation as imdilate
 from   balu3.im.proc import fspecial, im_grad
@@ -129,7 +128,7 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
 
 
 
-def gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm=False):
+def sci_gabor(img,hdiv=1, vdiv=1,angles=4,sigmas=(1,3),frequencies=(0.05, 0.25),norm=False):
   # from scipy
   kernels = []
   for theta in range(angles):
@@ -187,7 +186,7 @@ sqrt_log2 = np.sqrt(_log2)
 _2pi = 2 * np.pi
 
 # from Balu Toolbox
-def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1, mask=21, norm=False, names=False):
+def gabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1, mask=21, norm=False, names=False):
 
     if mask % 2 == 0:
         raise ValueError(
@@ -239,49 +238,37 @@ def fgabor(image, region=None, *, rotations=8, dilations=8, freq_h=2, freq_l=.1,
 
     return X
 
-def fourier(I,region=None,Nfourier=64,Mfourier=64,nfourier=4,mfourier=4):
-    if region is None:
-        region = np.ones_like(I)
-    I[region == 0] = 0
-    Im       = cv2.resize(I,(Nfourier,Mfourier))
-    FIm      = np.fft.fft2(Im)
-    Y        = FIm[0:int(Nfourier/2),0:int(Mfourier/2)]
-    x        = np.abs(Y)
-    F        = cv2.resize(x,(nfourier,mfourier))
-    f        = np.reshape(F,(nfourier*mfourier,))
-    x        = np.angle(Y)
-    A        = cv2.resize(x,(nfourier,mfourier))
-    a        = np.reshape(A,(nfourier*mfourier,))
-    X        = np.concatenate((f,a))
-    return X
 
-
-def fourierg(img, region=None, Nfourier=64, Mfourier=64, nfourier=4, mfourier=4):
+#optimized with chatGPT
+def fourier(img, region=None, Nfourier=64, Mfourier=64, nfourier=4, mfourier=4, norm=False):
     if region is None:
         region = np.ones_like(img)
     img[region == 0] = 0
-    imgm = cv2.resize(img, (Nfourier, Mfourier))
+    imgm  = cv2.resize(img, (Nfourier, Mfourier))
     Fimgm = np.fft.fft2(imgm)
-    Y = Fimgm[:Nfourier//2, :Mfourier//2]
-    F = np.abs(Y)
-    f = cv2.resize(F, (nfourier, mfourier)).flatten()
-    A = np.angle(Y)
-    a = cv2.resize(A, (nfourier, mfourier)).flatten()
-    X = np.concatenate((f, a))
+    Y     = Fimgm[:Nfourier//2, :Mfourier//2]
+    F     = np.abs(Y)
+    f     = cv2.resize(F, (nfourier, mfourier)).flatten()
+    A     = np.angle(Y)
+    a     = cv2.resize(A, (nfourier, mfourier)).flatten()
+    X     = np.concatenate((f, a))
+    if norm:
+      X = X/np.linalg.norm(X)
     return X
 
-
-def dct(I,region=None,Ndct=64,Mdct=64,ndct=4,mdct=4):
+def dct(img, region=None, Ndct=64, Mdct=64, ndct=4, mdct=4, norm=False):
     if region is None:
-        region = np.ones_like(I)
-    I[region == 0] = 0
-    Im       = cv2.resize(I,(Ndct,Mdct))
-    FIm      = dct(Im)
-    Y        = FIm[0:int(Ndct/2),0:int(Mdct/2)]
-    x        = np.abs(Y)
-    F        = cv2.resize(x,(ndct,mdct))
-    X        = np.reshape(F,(ndct*mdct,))
+        region = np.ones_like(img)
+    img[region == 0] = 0
+    Fimgm = cv2.dct(cv2.resize(img, (Ndct, Mdct)))
+    Y     = Fimgm[0:int(Ndct/2), 0:int(Mdct/2)]
+    F     = np.abs(Y)
+    X     = np.reshape(cv2.resize(F, (ndct, mdct)), (ndct*mdct,))
+    if norm:
+      X = X/np.linalg.norm(X)
     return X
+
+
 
 def clp(img):
 
