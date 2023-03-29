@@ -91,6 +91,7 @@ def lbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
 
 
 def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
+  img = np.asarray(img, dtype = 'int')
   (nv,nh) = (vdiv,hdiv)
   nn  = int(np.fix(img.shape[0]/nv))
   mm  = int(np.fix(img.shape[1]/nh))
