@@ -4,6 +4,7 @@ import skimage
 import cv2
 from   skimage.feature import local_binary_pattern
 from   skimage.filters import gabor_kernel
+
 from   scipy import ndimage as ndi
 from   scipy.stats import kurtosis,skew
 from   scipy.ndimage.morphology import binary_dilation as imdilate
@@ -89,6 +90,12 @@ def lbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
   else:
     return X
 
+
+def hog(img, orientations=9, pixels_per_cell=(16,16),cells_per_block=(2,2),norm=False):
+  X = skimage.feature.hog(img, orientations=orientations, pixels_per_cell=pixels_per_cell,cells_per_block=cells_per_block)
+  if norm:
+      X = X/np.linalg.norm(X)
+  return X
 
 def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
   img = np.asarray(img, dtype = 'int')
