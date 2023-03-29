@@ -90,7 +90,6 @@ def lbp(img,hdiv=1, vdiv=1, mapping='nri_uniform',norm=False,names=False):
   else:
     return X
 
-
 def hog(img, orientations=9, pixels_per_cell=(16,16),cells_per_block=(2,2),norm=False):
   X = skimage.feature.hog(img, orientations=orientations, pixels_per_cell=pixels_per_cell,cells_per_block=cells_per_block)
   if norm:
