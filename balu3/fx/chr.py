@@ -255,6 +255,22 @@ def fourier(I,region=None,Nfourier=64,Mfourier=64,nfourier=4,mfourier=4):
     X        = np.concatenate((f,a))
     return X
 
+
+def fourierg(img, region=None, Nfourier=64, Mfourier=64, nfourier=4, mfourier=4):
+    if region is None:
+        region = np.ones_like(img)
+    img[region == 0] = 0
+    imgm = cv2.resize(img, (Nfourier, Mfourier))
+    Fimgm = np.fft.fft2(imgm)
+    Y = Fimgm[:Nfourier//2, :Mfourier//2]
+    F = np.abs(Y)
+    f = cv2.resize(F, (nfourier, mfourier)).flatten()
+    A = np.angle(Y)
+    a = cv2.resize(A, (nfourier, mfourier)).flatten()
+    X = np.concatenate((f, a))
+    return X
+
+
 def dct(I,region=None,Ndct=64,Mdct=64,ndct=4,mdct=4):
     if region is None:
         region = np.ones_like(I)
