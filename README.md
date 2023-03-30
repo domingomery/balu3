@@ -17,14 +17,20 @@ Domingo Mery, Christian Pieringer and Marco Bucchi
 
 # Modules
 
-* fx -- Feature Extraction
+## `fx` -- Feature Extraction
 
 `fx.geo`
 
-| Function    | Description |
-| ----------- | ----------- |
+| Function    | Description                    |
+| ----------- | ------------------------------ |
 | basicgeo    | Basic geometric features       |
-| lbp         | Local Binary Patterns        |
+| hugeo       | Hu moments                     |
+| flusser     | Flusser moments                |
+| gupta       | Gupta moments                  |
+| fourierdes  | Fourier descriptors            |
+| efourierdes | Elliptic Fourier descriptors   |
+| fit_ellipse | Elliptic feaures               |
+| lbp         | Local Binary Patterns          |
 
 
 * fs -- Feature Selection
