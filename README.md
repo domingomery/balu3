@@ -19,7 +19,7 @@ Domingo Mery, Christian Pieringer and Marco Bucchi
 
 ## `fx` -- Feature Extraction
 
-`fx.geo`
+`fx.geo` -- Geometric features
 
 | Function    | Description                    |
 | ----------- | ------------------------------ |
@@ -33,11 +33,64 @@ Domingo Mery, Christian Pieringer and Marco Bucchi
 | lbp         | Local Binary Patterns          |
 
 
-* fs -- Feature Selection
+`fx.chr` -- Chromatic features
 
-* ft -- Feature Transformation
+| Function    | Description                    |
+| ----------- | ------------------------------ |
+| basicint    | Basic intensity features       |
+| hugeo       | Hu moments                     |
+| lbp         | Local binary patterns          |
+| hog         | Histogram of gradients         |
+| haralick    | Haralick texture features      |
+| gabor       | Gabor features (by Balu)       |
+| sci_gabor   | Gabor features (by scimage)    |
+| fourier     | Fourier features (DFT)         |
+| dct         | Cosine transform features (DCT)|
+| clt         | Crossing line profile          |
+| contrast    | Contrast features              |
 
-* io -- Input/Output 
+
+## `ft` -- Feature Transformation
+
+`ft.norm` -- Normalization
+
+| Function    | Description                    |
+| ----------- | ------------------------------ |
+| minmax      | MinMax normalization           |
+| mean0       | mean=0, std=1 normalization    |
+
+
+`ft.trans` -- Linear transformation
+
+| Function    | Description                    |
+| ----------- | ------------------------------ |
+| pca         | Principal component analysis   |
+
+
+
+## `fs` -- Feature Selection
+
+`fs.sel` -- Normalization
+
+| Function    | Description                    |
+| ----------- | ------------------------------ |
+| jfisher     | Fisher score                   |
+| sp100       | specifity=1 score              |
+| clean       | Cleaning                       |
+| sfs         | Sequential forward selection   |
+| exsearch    | Exhaustive search selection    |
+
+
+## `io` -- Input/Output
+
+`io.misc` -- Miscellaneous
+
+| Function    | Description                    |
+| ----------- | ------------------------------ |
+| dirfiles    | Files of a drectory            |
+| num2fixstr  | Number to string with fixed 0s |
+| imageload   | Load of an image with indices  |
+
 
 * im -- Image Processing
 
