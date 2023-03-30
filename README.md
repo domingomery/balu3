@@ -19,6 +19,14 @@ Domingo Mery, Christian Pieringer and Marco Bucchi
 
 * fx -- Feature Extraction
 
+`fx.geo`
+
+| Function    | Description |
+| ----------- | ----------- |
+| basicgeo    | Basic geometric features       |
+| lbp         | Local Binary Patterns        |
+
+
 * fs -- Feature Selection
 
 * ft -- Feature Transformation
