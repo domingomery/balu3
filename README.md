@@ -15,6 +15,20 @@ Domingo Mery, Christian Pieringer and Marco Bucchi
 [![Colab Examples](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/domingomery/patrones/blob/master/Notebooks.md) Examples implemented in Balu3 using Google Colab.
 
 
+# Modules
+
+* fx -- Feature Extraction
+
+* fs -- Feature Selection
+
+* ft -- Feature Transformation
+
+* io -- Input/Output 
+
+* im -- Image Processing
+
+
+
 
 # Requirements
 
