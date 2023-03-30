@@ -47,6 +47,12 @@ Then, to upgrade:
 
 `pip install --upgrade .`
 
+Or:
+
+`git clone https://github.com/domingomery/balu3`
+
+`pip install ./balu3`
+
 
 
 
