@@ -12,6 +12,7 @@ setup(
                   'balu3.ft.norm',
                   'balu3.ft.trans',
                   'balu3.fs.sel',
+                  'balu3.cl.basics',
                   'balu3.im.proc',
                   'balu3.im.kfunc',
                   'balu3.im.seg',
