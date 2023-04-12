@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from   sklearn.metrics import confusion_matrix, accuracy_score
 from   sklearn.neighbors import KNeighborsClassifier
-import balu3.ft.norm as minmax
+from   balu3.ft.norm     import minmax
 
 
 
@@ -53,4 +53,3 @@ def ClassifierKNN(Xtrain,ytrain,Xtest,ytest):
   print(C)
   return acc,C
 
-  
