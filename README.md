@@ -70,7 +70,7 @@ Domingo Mery, Christian Pieringer and Marco Bucchi
 
 ## `fs` -- Feature Selection
 
-`fs.sel` -- Normalization
+`fs.sel` -- Selection algorithms
 
 | Function    | Description                    |
 | ----------- | ------------------------------ |
