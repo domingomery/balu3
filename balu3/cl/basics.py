@@ -38,11 +38,11 @@ def SplitTrainTest(X,y,n):
   
   return Xtrain,ytrain,Xtest,ytest
 
-# Clasificación usando KNN con 1 vecino
-def ClassifierKNN(Xtrain,ytrain,Xtest,ytest):
+# Clasificación usando KNN
+def ClassifierKNN(Xtrain,ytrain,Xtest,ytest,n_neighbors=1):
   Xtrain, a, b = minmax(Xtrain)
   Xtest        = Xtest * a + b
-  knn = KNeighborsClassifier(n_neighbors=1)
+  knn = KNeighborsClassifier(n_neighbors=n_neighbors)
   knn.fit(Xtrain, ytrain)
   ypred        = knn.predict(Xtest)
   acc          = accuracy_score(ytest,ypred)
