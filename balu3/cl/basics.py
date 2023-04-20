@@ -39,9 +39,10 @@ def SplitTrainTest(X,y,n):
   return Xtrain,ytrain,Xtest,ytest
 
 # Clasificación usando KNN
-def ClassifierKNN(Xtrain,ytrain,Xtest,ytest,n_neighbors=1):
-  Xtrain, a, b = minmax(Xtrain)
-  Xtest        = Xtest * a + b
+def ClassifierKNN(Xtrain,ytrain,Xtest,ytest,n_neighbors=1,normalize=True):
+  if normalize:
+    Xtrain, a, b = minmax(Xtrain)
+    Xtest        = Xtest * a + b
   knn = KNeighborsClassifier(n_neighbors=n_neighbors)
   knn.fit(Xtrain, ytrain)
   ypred        = knn.predict(Xtest)
