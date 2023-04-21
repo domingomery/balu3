@@ -47,7 +47,7 @@ def ClassifierKNN(Xtrain,ytrain,Xtest,ytest,n_neighbors=1,normalize=True):
   knn.fit(Xtrain, ytrain)
   ypred        = knn.predict(Xtest)
   acc          = accuracy_score(ytest,ypred)
-  print('Entrenando con '+str(Xtrain.shape[0])+' muestras y probando con '+str(Xtest.shape[0])+' muestras')
+  print('Entrenando con '+str(Xtrain.shape[0])+' muestras y probando con '+str(Xtest.shape[0])+' muestras (de '+str(Xtrain.shape[1])+ ' características)...')
   print('Testing Accuracy = '+str(acc*100)+'%')
   C = confusion_matrix(ytest,ypred)
   print('Matriz de Confusión:')
