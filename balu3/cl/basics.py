@@ -49,9 +49,9 @@ def ClassifierKNN(Xtrain,ytrain,Xtest,ytest,n_neighbors=1,normalize=True,echo=Tr
   acc          = accuracy_score(ytest,ypred)
   C = confusion_matrix(ytest,ypred)
   if echo:
-    print('Entrenando con '+str(Xtrain.shape[0])+' muestras y probando con '+str(Xtest.shape[0])+' muestras (de '+str(Xtrain.shape[1])+ ' características)...')
+    print('Training with '+str(Xtrain.shape[0])+' samples. Testing with '+str(Xtest.shape[0])+' samples (of '+str(Xtrain.shape[1])+ ' features)...')
     print('Testing Accuracy = '+str(acc*100)+'%')
-    print('Matriz de Confusión:')
+    print('Confusion Matrix:')
     print(C)
   return acc,C
 
