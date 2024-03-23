@@ -1,7 +1,3 @@
-# WARNING: 
-
-Work in Progress (do not install it !!)
-
 # balu3
 
 Python implementation for Balu Toolbox, based on previous implementations: Balu for Matlab (implemented by Domingo Mery), pyBalu for Python (implemented by Marco Bucchi), and pyXvis (implemented by Domingo Mery and Christian Pieringer).
