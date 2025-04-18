@@ -116,10 +116,10 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
       #haralick = [np.mean(x1),np.mean(x2),np.mean(x3),np.mean(x4),np.mean(x5),np.mean(x6)]
       haralick = np.concatenate((x0,x1,x2,x3,x4,x5), axis=1)
       if k==0:
-        X = haralick[0]
+        X = haralick
         k = 1
       else:
-        X = np.concatenate((X,haralick))
+        X = np.concatenate((X,haralick), axis=0)
   if norm:
     X = X/np.linalg.norm(X)
 
@@ -129,9 +129,9 @@ def haralick(img,hdiv=1, vdiv=1, distance=1,norm=False,names=False):
       for j in range(hdiv):
         for k in range(6):
           Xn.append('Haralick('+str(i)+','+str(j)+')-'+fst[k])
-    return X,Xn
+    return X.flatten(),Xn
   else:
-    return X
+    return X.flatten()
 
 
 
