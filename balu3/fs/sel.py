@@ -2,7 +2,7 @@ import numpy as np
 from itertools import combinations
 import warnings
 import tqdm
-
+import math
 
 def jfisher(features, ypred, p=None): 
     m = features.shape[1]
@@ -143,8 +143,51 @@ def sfs(features, ypred, n_features, *, force=False, method='fisher', options=No
 
     return np.array(selected)
 
+#def choose(n, k):
+#    return int(np.math.factorial(n) / (np.math.factorial(n - k) * np.math.factorial(k)))
+#
+#def exsearch(features, ypred, n_features, *, method='fisher', options=None, show=False):
+#    if options is None:
+#        options = dict()
+#
+#    tot_feats = features.shape[1]
+#    N = choose(tot_feats, n_features)
+#
+#    if N > 10000:
+#        warnings.warn(
+#            f'Doing more than 10.000 iterations ({N}). This may take a while...')
+#
+#    def _calc_score(ii):
+#        feats = features[:, ii]
+#        return score(feats, ypred, method=method, **options)
+#
+#    _combinations = combinations(range(tot_feats), n_features)
+#
+#    if show:
+#        _combinations = zip(tqdm.trange(N,
+#                                        desc='Combinations checked',
+#                                        unit_scale=True,
+#                                        unit=' combinations'),
+#                            _combinations)
+#
+#        _combinations = (ii for _, ii in _combinations)
+#
+#    chosen_feats = max(_combinations, key=_calc_score)
+#
+#    return np.array(chosen_feats)
+
+
+
+
+
 def choose(n, k):
-    return int(np.math.factorial(n) / (np.math.factorial(n - k) * np.math.factorial(k)))
+    """Calculate the binomial coefficient."""
+    # Use scipy.special.comb for numerical stability with large numbers
+    # import scipy.special
+    # return int(scipy.special.comb(n, k))
+    # Or use the formula directly with numpy for factorial
+    return int(math.factorial(n) / (math.factorial(n - k) * math.factorial(k)))
+
 
 def exsearch(features, ypred, n_features, *, method='fisher', options=None, show=False):
     if options is None:
@@ -159,16 +202,17 @@ def exsearch(features, ypred, n_features, *, method='fisher', options=None, show
 
     def _calc_score(ii):
         feats = features[:, ii]
-        return score(feats, ypred, method=method, **options)
-
+        # Use jfisher to calculate the score
+        return jfisher(feats, ypred)  
     _combinations = combinations(range(tot_feats), n_features)
 
     if show:
-        _combinations = zip(tqdm.trange(N,
-                                        desc='Combinations checked',
-                                        unit_scale=True,
-                                        unit=' combinations'),
-                            _combinations)
+        # Assuming tqdm is imported somewhere else in the user's notebook
+        #_combinations = zip(tqdm.trange(N,
+        #                                desc='Combinations checked',
+        #                                unit_scale=True,
+        #                                unit=' combinations'),
+        #                    _combinations)
 
         _combinations = (ii for _, ii in _combinations)
 
