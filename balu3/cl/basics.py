@@ -9,8 +9,8 @@ from   balu3.ft.norm     import minmax
 # Separación entre training y testing
 def SplitTrainTest(X,y,n):
 
-  K      = np.max(y)+1              # número de clases
-  N      = int(X.shape[0]/K)        # numeros de muestras por clase
+  K      = int(np.max(y)+1)         # número de clases
+  N      = round(X.shape[0]/K)      # numeros de muestras por clase
   Ntrain = n*K                      # número de muestras para el training
   Ntest  = K*N-Ntrain               # número de muestras para el testing
   M      = X.shape[1]               # número de características por muestra
