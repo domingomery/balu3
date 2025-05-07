@@ -189,7 +189,7 @@ def choose(n, k):
     return int(math.factorial(n) / (math.factorial(n - k) * math.factorial(k)))
 
 
-def exsearch(features, ypred, n_features, *, method='fisher', options=None, show=False):
+def exsearch_old(features, ypred, n_features, *, method='fisher', options=None, show=False):
     if options is None:
         options = dict()
 
@@ -215,6 +215,41 @@ def exsearch(features, ypred, n_features, *, method='fisher', options=None, show
         #                    _combinations)
 
         _combinations = (ii for _, ii in _combinations)
+
+    chosen_feats = max(_combinations, key=_calc_score)
+
+    return np.array(chosen_feats)
+
+def exsearch(features, ypred, n_features, *, method='fisher', options=None, show=False):
+    if options is None:
+        options = dict()
+
+    tot_feats = features.shape[1]
+    N = choose(tot_feats, n_features)
+
+    if N > 10000:
+        warnings.warn(
+            f'Doing more than 10.000 iterations ({N}). This may take a while...')
+
+    def _calc_score(ii):
+        feats = features[:, ii]
+        # Use jfisher to calculate the score
+        return jfisher(feats, ypred)  
+    _combinations = combinations(range(tot_feats), n_features)
+
+    if show:
+        # Assuming tqdm is imported somewhere else in the user's notebook
+        #_combinations = zip(tqdm.trange(N,
+        #                                desc='Combinations checked',
+        #                                unit_scale=True,
+        #                                unit=' combinations'),
+        #                    _combinations)
+
+        # The original line was causing the error. 
+        # It tried to unpack a single element (a tuple) into two variables.
+        # _combinations = (ii for _, ii in _combinations) 
+        # The correct way is to simply iterate through the combinations:
+        _combinations = (ii for ii in _combinations)
 
     chosen_feats = max(_combinations, key=_calc_score)
 
