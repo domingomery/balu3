@@ -73,7 +73,12 @@ def pca(features, *, n_components=0, energy=0):
 
     else:
         # calculate only the wanted number of eigenvectors
-        eig_vals, eig_vecs = eigh(Cx, eigvals=(N-n_components, N-1))
+        # Instead of using the deprecated 'eigvals' argument, 
+        # we calculate all eigenvalues and eigenvectors, then select the desired range.
+        eig_vals, eig_vecs = eigh(Cx)  
+        eig_vals = eig_vals[N-n_components:N] #Select the desired range of eigenvalues
+        eig_vecs = eig_vecs[:, N-n_components:N] #Select the corresponding eigenvectors
+        
         # reverse them into descending value 
         _lambda = eig_vals[::-1]
         transform = eig_vecs[:,::-1]
